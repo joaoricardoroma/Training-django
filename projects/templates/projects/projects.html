@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+{% block content %}
+<body>
+<h1>Arceus</h1>
+<h3>Arceus é conhecido pela sua habilidade Multitype,
+    onde ele é capaz de mudar para qualquer tipo elemental
+    usando suas placas, refletindo sua natureza como criador
+    de todos os Pokémon. ... No universo Pokémon todos incluindo
+    os humanos passariam a desaparecer, já na fanfic isso se limitaria
+    apenas aos Pokémon.</h3>
+</body>
+<ul>
+    {% for pokemon in pokemons %}
+    <li>Pokemon:<a href="{% url 'project' pokemon.number %}">{{pokemon.pokemon}}</a>--- Type: {{pokemon.type}}</li>
+    {% endfor %}
+ </ul>
+
+{% endblock content %}
