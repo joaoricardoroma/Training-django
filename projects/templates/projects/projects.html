@@ -9,10 +9,24 @@
     os humanos passariam a desaparecer, já na fanfic isso se limitaria
     apenas aos Pokémon.</h3>
 </body>
-<ul>
+
+<table>
+    <tr>
+        <th>Pokemon</th>
+        <th>attack</th>
+        <th>number</th>
+    </tr>
     {% for pokemon in pokemons %}
-    <li>Pokemon:<a href="{% url 'project' pokemon.number %}">{{pokemon.pokemon}}</a>--- Type: {{pokemon.type}}</li>
+    <tr>
+        <td>{{pokemon.pokemon_name}}</td>
+        <td>{{pokemon.attack}}</td>
+        <td>{{pokemon.number}}</td>
+        <td><a href="{% url 'update_pokemon' pokemon.id %}">Edit</a></td>
+        <td><a href="{% url 'delete_pokemon' pokemon.id %}">Delete</a></td>
+        <td><a href="{% url 'project' pokemon.id %}">View</a></td>
+    </tr>
+
     {% endfor %}
- </ul>
+</table>
 
 {% endblock content %}

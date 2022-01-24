@@ -1,23 +1,10 @@
-
-from django.http import HttpResponse
-from django.shortcuts import render
-
-pokemons = {
-  "pokemon": "Squirtle",
-  "type": "water",
-  "number": '1'
-},{
-  "pokemon": "charmander",
-  "type": "fire",
-  "number": '2'
-},{
-  "pokemon": "bulbassar",
-  "type": "grass",
-  "number": '3'
-},
+from django.shortcuts import render, redirect
+from .models import Pokemon
+from .forms import PokemonForm
 
 
 def projects(request):
+    pokemons = Pokemon.objects.all()
     context = {
         'pokemons': pokemons
     }
@@ -25,9 +12,43 @@ def projects(request):
 
 
 def project(request, pk):
-    pokemonObj = None
-    for i in pokemons:
-        if i['number'] == pk:
-            pokemonObj = i
+    pokemonObj = Pokemon.objects.get(id=pk)
     return render(request, 'projects/single_project.html', {'pokemon': pokemonObj})
 
+
+def create_pokemon(request):
+    form = PokemonForm()
+
+    if request.method == 'POST':
+        form = PokemonForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('projects')
+
+    context = {'form': form}
+    return render(request, "projects/project_form.html", context)
+
+
+def update_pokemon(request, pk):
+    pokemon = Pokemon.objects.get(id=pk)
+    form = PokemonForm(instance=pokemon)
+
+    if request.method == 'POST':
+        form = PokemonForm(request.POST, request.FILES,  instance=pokemon)
+        if form.is_valid():
+            form.save()
+            return redirect('projects')
+
+    context = {'form': form}
+    return render(request, "projects/project_form.html", context)
+
+
+def delete_pokemon(request, pk):
+    pokemon = Pokemon.objects.get(id=pk)
+    if request.method == 'POST':
+        pokemon.delete()
+        return redirect('projects')
+    context = {
+        'pokemon': pokemon
+    }
+    return render(request, 'projects/delete_template.html', context)
